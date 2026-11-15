@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vòng Quay May Mắn - BZT USA | ROCKY</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- TOP HEADER -->
+  <header class="top-bar">
+    <div class="brand-group">
+      <div class="brand-logo-text">BZT USA</div>
+      <div class="brand-divider"></div>
+      <div class="brand-logo-text">ROCKY</div>
+    </div>
+
+    <div class="campaign-center">
+      <div class="campaign-sub">CHƯƠNG TRÌNH TRI ÂN QUÝ ĐẠI LÝ</div>
+      <div class="campaign-route">THÀNH ĐÔ &bull; CỬU TRẠI CẦU</div>
+    </div>
+
+    <div class="header-actions">
+      <button class="pill-btn" id="btnFullscreen" title="Toàn màn hình">
+        <span id="fullscreenIcon">⛶</span> <span id="fullscreenText">Toàn màn hình</span>
+      </button>
+      <button class="pill-btn" id="btnSound" title="Bật/Tắt âm thanh">
+        <span id="soundIcon">🔊</span> <span id="soundText">Âm thanh: Bật</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- TABS & MAIN TITLE -->
+  <section class="title-section">
+    <nav class="nav-tabs">
+      <button class="nav-tab active" data-tab="wheel">🎡 Vòng quay</button>
+      <button class="nav-tab" data-tab="manage">📋 Danh sách &amp; giải</button>
+      <button class="nav-tab" data-tab="results">🏆 Kết quả</button>
+    </nav>
+    <h1 class="main-title">VÒNG QUAY MAY MẮN</h1>
+  </section>
+
+  <!-- TAB 1: WHEEL -->
+  <main class="main-container" id="tab-wheel">
+    <!-- Left Column: Lucky Wheel -->
+    <div class="wheel-column">
+      <div class="wheel-wrapper">
+        <div class="wheel-glow"></div>
+        <div class="pointer-container">
+          <div class="pointer-arrow"></div>
+        </div>
+        <canvas id="wheelCanvas" width="760" height="760"></canvas>
+        <div class="center-hub" id="centerHub" title="Bấm để quay!">
+          <div class="center-hub-inner">
+            <span>LUCKY</span>
+            <span>DRAW</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: Controls & Info -->
+    <div class="control-column">
+      <!-- Current Prize Card -->
+      <div class="glass-card prize-selector-card">
+        <div class="card-label">GIẢI THƯỞNG ĐANG QUAY</div>
+        <div class="current-prize-header">
+          <span class="prize-medal" id="activePrizeIcon">🥇</span>
+          <h2 class="current-prize-name" id="activePrizeTitle">Giải nhất</h2>
+        </div>
+        <div class="current-prize-desc" id="activePrizeDesc">Đồng tiền vàng trị giá 10.000.000Đ</div>
+
+        <div class="select-wrapper">
+          <select id="prizeSelect" class="prize-dropdown"></select>
+        </div>
+
+        <div class="prize-showcase-box">
+          <div class="gold-coin-emblem" id="prizeVisualBadge">
+            <div class="coin-rim">
+              <span class="coin-text">Lộc</span>
+              <span class="coin-sub">BZT USA</span>
+            </div>
+          </div>
+          <div class="showcase-info">
+            <div class="showcase-title" id="showcaseTitle">Đồng tiền vàng 9999</div>
+            <div class="showcase-value" id="showcaseValue">Trị giá: 10.000.000 VNĐ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Counters Row -->
+      <div class="stats-grid">
+        <div class="glass-card stat-box">
+          <div class="stat-number" id="statParticipants">9</div>
+          <div class="stat-label">Người còn lại</div>
+        </div>
+        <div class="glass-card stat-box">
+          <div class="stat-number" id="statRemainingPrizes">9</div>
+          <div class="stat-label">Giải đang chọn</div>
+        </div>
+        <div class="glass-card stat-box">
+          <div class="stat-number" id="statTotalPrizes">20</div>
+          <div class="stat-label">Tổng số giải</div>
+        </div>
+      </div>
+
+      <!-- Spin Action -->
+      <div class="spin-action-area">
+        <button class="spin-btn" id="btnSpin">
+          <span class="spin-btn-text">QUAY MAY MẮN</span>
+          <span class="spin-btn-sparkle">✦</span>
+        </button>
+        <p class="spin-hint">Quay với 9 người trong vòng quay. Mỗi người chỉ trúng tối đa 1 giải.</p>
+      </div>
+
+      <!-- Recent Winner -->
+      <div class="glass-card recent-winner-card">
+        <div class="card-label">KẾT QUẢ GẦN NHẤT</div>
+        <div class="recent-winner-content" id="recentWinnerText">
+          TRẦM THẠCH VŨ — Giải nhì (Máy lọc không khí PANASONIC)
+        </div>
+      </div>
+
+      <!-- All Prizes Overview -->
+      <div class="glass-card prizes-overview-card">
+        <div class="card-label">PHẦN QUÀ CHƯƠNG TRÌNH</div>
+        <div class="prizes-mini-grid" id="prizesMiniGrid"></div>
+      </div>
+    </div>
+  </main>
+
+  <!-- TAB 2: MANAGE PARTICIPANTS & PRIZES -->
+  <section class="tab-panel hidden" id="tab-manage">
+    <div class="manage-grid">
+      <!-- Participants Manager -->
+      <div class="glass-card panel-card">
+        <div class="panel-header">
+          <h3>👥 Danh sách người tham gia (<span id="manageCount">0</span>)</h3>
+          <div class="panel-actions">
+            <button class="btn-secondary" id="btnShuffle">🔀 Xáo trộn</button>
+            <button class="btn-secondary" id="btnResetDefault">↺ Khôi phục mẫu</button>
+          </div>
+        </div>
+        <p class="panel-desc">Nhập mỗi tên một dòng. Hệ thống tự động loại bỏ tên đã trúng giải khỏi vòng quay hiện tại.</p>
+        <textarea id="participantsInput" class="custom-textarea" rows="12" placeholder="Nhập danh sách tên..."></textarea>
+        <div class="panel-footer">
+          <button class="btn-gold" id="btnSaveParticipants">💾 Cập nhật vòng quay</button>
+        </div>
+      </div>
+
+      <!-- Prizes Manager -->
+      <div class="glass-card panel-card">
+        <div class="panel-header">
+          <h3>🎁 Cơ cấu giải thưởng</h3>
+          <button class="btn-secondary" id="btnAddPrize">+ Thêm giải</button>
+        </div>
+        <p class="panel-desc">Tùy chỉnh tên giải, phần quà và số lượng giải thưởng.</p>
+        <div id="prizesEditorList" class="prizes-editor-list"></div>
+        <div class="panel-footer">
+          <button class="btn-gold" id="btnSavePrizes">💾 Lưu cơ cấu giải</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TAB 3: RESULTS -->
+  <section class="tab-panel hidden" id="tab-results">
+    <div class="glass-card panel-card results-panel">
+      <div class="panel-header">
+        <h3>🏆 Bảng vàng kết quả trúng thưởng (<span id="resultsCount">0</span>)</h3>
+        <div class="panel-actions">
+          <button class="btn-secondary" id="btnExportCSV">📥 Xuất file CSV</button>
+          <button class="btn-danger" id="btnClearResults">🗑️ Xóa lịch sử</button>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="results-table">
+          <thead>
+            <tr>
+              <th>STT</th>
+              <th>Họ và tên</th>
+              <th>Giải thưởng</th>
+              <th>Phần quà</th>
+              <th>Thời gian</th>
+            </tr>
+          </thead>
+          <tbody id="resultsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- WINNER MODAL -->
+  <div class="modal-backdrop hidden" id="winnerModal">
+    <div class="winner-modal-card">
+      <div class="modal-ribbon">CHÚC MỪNG TRÚNG THƯỞNG</div>
+      <div class="modal-trophy">🏆</div>
+      <div class="modal-winner-name" id="modalWinnerName">NGUYỄN VĂN A</div>
+      <div class="modal-prize-badge" id="modalPrizeName">Giải nhất</div>
+      <div class="modal-prize-detail" id="modalPrizeDetail">Đồng tiền vàng trị giá 10.000.000Đ</div>
+      <div class="modal-buttons">
+        <button class="btn-gold modal-btn" id="btnConfirmWinner">Xác nhận &amp; Tiếp tục</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/audio.js"></script>
+  <script src="js/confetti.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
